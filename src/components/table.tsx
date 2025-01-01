@@ -9,19 +9,23 @@ export const Table = ({
   data: User[];
 }) => {
   return (
-    <table>
+    <table className="border border-gray-300 rounded-md w-full">
       <thead>
-        <tr>
+        <tr className="border-b border-gray-300">
           {columns.map((column) => (
-            <th>{column.label}</th>
+            <th key={column.key} className="border-r border-gray-300">
+              {column.label}
+            </th>
           ))}
         </tr>
       </thead>
       <tbody>
         {data.map((row) => (
-          <tr>
+          <tr key={row.id} className="border-b border-gray-300">
             {columns.map((column) => (
-              <td>{column.render(row)}</td>
+              <td key={column.key} className="border-r border-gray-300">
+                {column.render(row)}
+              </td>
             ))}
           </tr>
         ))}

@@ -1,52 +1,74 @@
 // import "./App.css";
-import { COLUMN_LIST } from "./constants/column";
-import { NEW_USER_LIST } from "./constants/users";
-import { Table } from "./components/table";
 import { useState } from "react";
+import { COLUMN_LIST } from "./constants/column";
+import { Table } from "./components/table";
+import { UserForm } from "./components/userForm";
+import { useUsers } from "./hooks/useUsers";
 import { getVisibleColumns } from "./utils/columnsHelper";
-import { getSortedUsers, getVisibleUsers } from "./utils/usersHelper";
 import { SortDirection, SortKey } from "./type/user";
 
 function App() {
-  const [role, setRole] = useState<"student" | "mentor" | "all">("all");
-  const [sortKey, setSortKey] = useState<SortKey>("none");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const {
+    role,
+    setRole,
+    sortKey,
+    setSortKey,
+    sortDirection,
+    setSortDirection,
+    displayUsers,
+    setUsers,
+  } = useUsers();
+  const [isOpen, setIsOpen] = useState(false);
   const visibleColumns = getVisibleColumns(COLUMN_LIST, role);
-  const visibleUsers = getVisibleUsers(NEW_USER_LIST, role);
-  const sortedUsers = getSortedUsers(visibleUsers, sortKey, sortDirection);
+
   return (
     <>
-      <select
-        value={role}
-        onChange={(e) =>
-          setRole(e.target.value as "student" | "mentor" | "all")
-        }
+      <div className="flex gap-2">
+        <select
+          className="border border-gray-300 rounded-md p-2"
+          value={role}
+          onChange={(e) =>
+            setRole(e.target.value as "student" | "mentor" | "all")
+          }
+        >
+          <option value="all">全て</option>
+          <option value="student">学生</option>
+          <option value="mentor">メンター</option>
+        </select>
+        <select
+          className="border border-gray-300 rounded-md p-2"
+          value={sortKey}
+          onChange={(e) => setSortKey(e.target.value as SortKey)}
+        >
+          <option value="none">なし</option>
+          {role === "student" && (
+            <>
+              <option value="studyMinutes">学習時間</option>
+              <option value="score">スコア</option>
+            </>
+          )}
+          {role === "mentor" && (
+            <option value="experienceDays">経験日数</option>
+          )}
+        </select>
+        <select
+          className="border border-gray-300 rounded-md p-2"
+          value={sortDirection}
+          onChange={(e) => setSortDirection(e.target.value as SortDirection)}
+          disabled={role === "all" || sortKey === "none"}
+        >
+          <option value="asc">昇順</option>
+          <option value="desc">降順</option>
+        </select>
+      </div>
+      <button
+        className="border border-gray-300 rounded-md p-2"
+        onClick={() => setIsOpen((prev) => !prev)}
       >
-        <option value="all">全て</option>
-        <option value="student">学生</option>
-        <option value="mentor">メンター</option>
-      </select>
-      <select
-        value={sortKey}
-        onChange={(e) => setSortKey(e.target.value as SortKey)}
-      >
-        <option value="none">なし</option>
-        {role === "student" && (
-          <>
-            <option value="studyMinutes">学習時間</option>
-            <option value="score">スコア</option>
-          </>
-        )}
-        {role === "mentor" && <option value="experienceDays">経験日数</option>}
-      </select>
-      <select
-        value={sortDirection}
-        onChange={(e) => setSortDirection(e.target.value as SortDirection)}
-      >
-        <option value="asc">昇順</option>
-        <option value="desc">降順</option>
-      </select>
-      <Table columns={visibleColumns} data={sortedUsers} />
+        新規作成フォーム {isOpen ? "閉じる" : "開く"}
+      </button>
+      {isOpen && <UserForm setUsers={setUsers} setIsOpen={setIsOpen} />}
+      <Table columns={visibleColumns} data={displayUsers} />
     </>
   );
 }

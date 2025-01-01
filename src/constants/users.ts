@@ -1,5 +1,5 @@
 import { User } from "../type/user";
-import { getMatchingMentors, getMatchingStudents, isStudent } from "../utils/usersHelper";
+
 
 export const USER_LIST: User[] = [
   { id: 1, name: "鈴木太郎", role: "student", email: "test1@happiness.com", age: 26, postCode: "100-0003", phone: "0120000001", hobbies: ["旅行", "食べ歩き", "サーフィン"], url: "https://aaa.com", studyMinutes: 3000, taskCode: 101, studyLangs: ["Rails", "Javascript"], score: 68 },
@@ -12,16 +12,3 @@ export const USER_LIST: User[] = [
   { id: 8, name: "鈴木八郎", role: "mentor", email: "test8@happiness.com", age: 33, postCode: "100-0009", phone: "0120000008", hobbies: ["ランニング", "旅行"], url: "https://hhh.com", experienceDays: 6000, useLangs: ["Golang", "Rails"], availableStartCode: 301, availableEndCode: 505 },
 ]
 
-export const NEW_USER_LIST: User[] = USER_LIST.map((user) => {
-  if (isStudent(user)) {
-    return {
-      ...user,
-      mentors: getMatchingMentors(user, USER_LIST)
-    }
-  } else {
-    return {
-      ...user,
-      students: getMatchingStudents(user, USER_LIST)
-    }
-  }
-});
