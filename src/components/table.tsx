@@ -1,4 +1,13 @@
-export const Table = ({ columns, data }: { columns: any[]; data: any[] }) => {
+import { Column } from "../type/column";
+import { User } from "../type/user";
+
+export const Table = ({
+  columns,
+  data,
+}: {
+  columns: Column[];
+  data: User[];
+}) => {
   return (
     <table>
       <thead>
@@ -12,7 +21,7 @@ export const Table = ({ columns, data }: { columns: any[]; data: any[] }) => {
         {data.map((row) => (
           <tr>
             {columns.map((column) => (
-              <td>{row[column.key]}</td>
+              <td>{column.render(row)}</td>
             ))}
           </tr>
         ))}
