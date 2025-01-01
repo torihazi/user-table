@@ -30,4 +30,7 @@ export interface Mentor extends BaseUserInfo {
   students?: string[];
 }
 
+export type SortKey = "none" | "studyMinutes" | "score" | "experienceDays";
+export type SortDirection = "asc" | "desc";
+
 export type User = Student | Mentor;
