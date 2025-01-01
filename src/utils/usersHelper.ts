@@ -17,3 +17,11 @@ export const getMatchingStudents = ((mentor: Mentor, users: User[]): string[] =>
     .map((user) => user.name);
 }); 
 
+export const getVisibleUsers = (users: User[], role: "student" | "mentor" | "all") => {
+  return users.filter((user) => {
+    if (role === "all") return true;
+    if (role === "student") return isStudent(user);
+    if (role === "mentor") return isMentor(user);
+    return false;
+  });
+};
