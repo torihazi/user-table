@@ -9,6 +9,8 @@ export const useUsers = () => {
   const [sortKey, setSortKey] = useState<SortKey>("none");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
+
+  
   const displayUsers = useMemo(() => {
     const newUsers = users.map((user) => {  
       if (isStudent(user)) {

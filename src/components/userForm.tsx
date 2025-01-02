@@ -8,13 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "../schema/user";
 import { UserFormData } from "../schema/user";
 import { User } from "../type/user";
+import { Dispatch, SetStateAction } from "react";
 
 export const UserForm = ({
   setUsers,
   setIsOpen,
 }: {
-  setUsers: (users: User[]) => void;
-  setIsOpen: (isOpen: boolean) => void;
+  setUsers: Dispatch<SetStateAction<User[]>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const {
     register,
@@ -26,7 +27,6 @@ export const UserForm = ({
     resolver: zodResolver(userSchema),
     defaultValues: {
       role: "student",
-      hobbies: [""],
     },
   });
 
@@ -34,7 +34,7 @@ export const UserForm = ({
     fields: hobbies,
     append: appendHobbies,
     remove: removeHobbies,
-  } = useFieldArray({
+  } = useFieldArray<UserFormData, "hobbies">({
     control,
     name: "hobbies",
   });
@@ -43,7 +43,7 @@ export const UserForm = ({
     fields: studyLangs,
     append: appendStudyLangs,
     remove: removeStudyLangs,
-  } = useFieldArray({
+  } = useFieldArray<UserFormData, "studyLangs">({
     control,
     name: "studyLangs",
   });
@@ -52,14 +52,14 @@ export const UserForm = ({
     fields: useLangs,
     append: appendUseLangs,
     remove: removeUseLangs,
-  } = useFieldArray({
+  } = useFieldArray<UserFormData, "useLangs">({
     control,
     name: "useLangs",
   });
 
   const role = useWatch({ control, name: "role" });
 
-  const onSubmit: SubmitHandler<UserFormData> = (data: UserFormData) => {
+  const onSubmit: SubmitHandler<UserFormData> = (data) => {
     setUsers((prevUsers: User[]) => [
       ...prevUsers,
       { ...data, id: prevUsers.length + 1 },
@@ -104,6 +104,7 @@ export const UserForm = ({
             {...register("email")}
             placeholder="メールアドレス"
             className="border border-gray-300 rounded-md p-1"
+            autoComplete="off"
           />
           {errors.email && (
             <span className="text-red-500">{errors.email.message}</span>
@@ -148,7 +149,7 @@ export const UserForm = ({
         </div>
         <div className="flex items-center gap-2">
           <label htmlFor="hobbies">趣味</label>
-          {hobbies.map((field, index) => (
+          {hobbies?.map((field, index) => (
             <div key={field.id} className="flex gap-2 w-30">
               <input
                 id={`hobbies.${index}`}
@@ -220,7 +221,7 @@ export const UserForm = ({
             </div>
             <div className="flex items-center gap-2">
               <label htmlFor="studyLangs">学習言語</label>
-              {studyLangs.map((field, index) => (
+              {studyLangs?.map((field, index) => (
                 <div key={field.id} className="flex gap-2 w-30 flex-shrink-0">
                   <input
                     id={`studyLangs.${index}`}
@@ -279,7 +280,7 @@ export const UserForm = ({
             </div>
             <div className="flex items-center gap-2">
               <label htmlFor="useLangs">使用言語</label>
-              {useLangs.map((field, index) => (
+              {useLangs?.map((field, index) => (
                 <div key={field.id} className="flex gap-2 w-30 flex-shrink-0">
                   <input
                     id={`useLangs.${index}`}
