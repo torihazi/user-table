@@ -1,4 +1,5 @@
-export type UserRole = "student" | "mentor";
+export const USER_ROLES = ["student", "mentor"] as const;
+export type UserRole = typeof USER_ROLES[number];
 
 export interface BaseUserInfo {
   id: number;
