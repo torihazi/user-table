@@ -34,27 +34,27 @@ export const UserForm = ({
     fields: hobbies,
     append: appendHobbies,
     remove: removeHobbies,
-  } = useFieldArray<UserFormData, "hobbies">({
+  } = useFieldArray<UserFormData>({
     control,
-    name: "hobbies",
+    name: "hobbies" as never,
   });
 
   const {
     fields: studyLangs,
     append: appendStudyLangs,
     remove: removeStudyLangs,
-  } = useFieldArray<UserFormData, "studyLangs">({
+  } = useFieldArray<UserFormData>({
     control,
-    name: "studyLangs",
+    name: "studyLangs" as never,
   });
 
   const {
     fields: useLangs,
     append: appendUseLangs,
     remove: removeUseLangs,
-  } = useFieldArray<UserFormData, "useLangs">({
+  } = useFieldArray<UserFormData>({
     control,
-    name: "useLangs",
+    name: "useLangs" as never,
   });
 
   const role = useWatch({ control, name: "role" });
